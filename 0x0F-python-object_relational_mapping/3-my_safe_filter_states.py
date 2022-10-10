@@ -1,24 +1,20 @@
 #!/usr/bin/python3
 """
-Displays all values in the states table of the database hbtn_0e_0_usa
-whose name matches that supplied as argument.
-Safe from SQL injections.
-Usage: ./3-my_safe_filter_states.py <mysql username> \
-                                    <mysql password> \
-                                    <database name> \
-                                    <state name searched>
+write a script that takes in arguments and displays all values in the states
+table of hbtn_0e_0_usa where name matches the argument. But this time,
+write one that is safe from MySQL injections!
 """
-import MySQLdb
 from sys import argv
+import MySQLdb
 
-if __name__ == "__main__":
-    db = MySQLdb.connect(host="localhost", port=3306, user=argv[1],
-                         passwd=argv[2], db=argv[3], charset="utf8")
-    cursor = db.cursor()
-    cursor.execute("SELECT * FROM states WHERE name LIKE %s ORDER BY id ASC",
-                   (argv[4],))
-    rows = cursor.fetchall()
-    for row in rows:
-        print(row)
-    cursor.close()
-    db.close()
+if __name__ == '__main__':
+    conn = MySQLdb.connect(host='localhost', port=3306, user=argv[1],
+                           password=argv[2], database=argv[3])
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM states WHERE name=%s ORDER BY id", (argv[4],))
+    row = cur.fetchall()
+    for i in row:
+        print(i)
+
+    cur.close()
+    conn.close()
